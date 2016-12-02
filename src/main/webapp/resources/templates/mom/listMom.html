@@ -1,0 +1,91 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading panel-search">
+                <div class="row info-header">
+                    <form name="searchMoMForm" novalidate>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <fieldset class="form-group">
+                                    <label for="meetingName">Meeting Name</label>
+                                    <input type="text" class="form-control" id="meetingName" ng-model="searchParams.meetingName" required maxlength="128">
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3">
+                                <fieldset class="form-group">
+                                    <label for="meetingName">Project Name</label>
+                                    <input type="text" class="form-control" id="projectName" ng-model="searchParams.projectName" required maxlength="128">
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3">
+                                <fieldset class="form-group">
+                                    <label for="meetingName">Meeting Date From</label>
+                                   	<p class="input-group">
+                                    	<input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="searchParams.meetingFromDate" 
+                                    	is-open="datePickerSettings.meetingFromDate" enable-time="false" ng-readonly="true" datepicker-options="dpOptions" required 
+                                    	id="meetingFromDate"/>
+                                        <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openDatePicker('meetingFromDate')">
+                                        	<i class="fa fa-calendar"></i></button>
+                                      	</span>
+                                    </p>
+                                   
+                                    <!-- <input type="text" class="form-control" id="meetingFromDate" ng-model="searchParams.meetingFromDate" required maxlength="128"
+                                    uib-datepicker-popup="dd-MM-yyyy" is-open="anActionItem.targetDateDPSts" enable-time="false" ng-readonly="true" datepicker-options="dpOptions"> -->
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3">
+                                <fieldset class="form-group">
+                                    <label for="meetingName">Meeting Date To</label>
+                                    <!-- <input type="text" class="form-control" id="meetingEndDate" ng-model="searchParams.meetingEndDate" required maxlength="128"> -->
+                                    <p class="input-group">
+                                    	<input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="searchParams.meetingEndDate" 
+                                    	is-open="datePickerSettings.meetingEndDate" enable-time="false" ng-readonly="true" datepicker-options="dpOptions" required 
+                                    	id="meetingEndDate"/>
+                                        <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openDatePicker('meetingEndDate')">
+                                        	<i class="fa fa-calendar"></i></button>
+                                      	</span>
+                                    </p>
+                                </fieldset>
+                            </div>
+                        </div> 
+                        <div class="row-clearfix">
+                        	<div class="col-md-12 pad-right-none">
+	                        	<!-- <div class="pull-right"> -->
+	                        	<div class="col-md-2 col-md-offset-12 pull-right pad-right-none pad-bottom-10">
+	                                <button type="button" class="btn btn-primary" ng-click="searchForm()" id="search">Search</button>
+	                                <button type="button" class="btn btn-primary" ng-click="clearForm()" id="clear">Clear</button>
+	                            </div>    
+	                            <!-- </div> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6" ng-repeat="rows in chunkedData">
+                            <ul class="event-list">
+                                <li ng-repeat="item in rows">
+                                   <time datetime="2014-07-20 0000">
+                                    <span class="day">{{item.meetingDate | date:'d'}}</span>
+                                    <span class="month">{{item.meetingDate | date:'MMM'}}</span>
+                                    <span class="year">{{item.meetingDate | date:'yyyy'}}</span>
+                                    <span class="time">{{(item.startTime && item.endTime)?((item.startTime | date:'HH:mm')+" - "+(item.endTime | date:'HH:mm')):''}}</span>
+                                </time>
+                                <div class="info">
+                                    <h2 class="title">{{item.meetingName}}</h2>
+                                    <p class="desc">{{item.projectName}}</p>
+                                </div>
+                                <div class="social">
+                                    <a class="btn btn-info" ng-href="#/edit/{{item.id}}"><i class="fa fa-pencil"></i></a>
+                                </div> 
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

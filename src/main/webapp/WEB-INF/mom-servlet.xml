@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+ 	<context:component-scan base-package="mom.controllers" />
+ 	<context:component-scan base-package="mom.models" />
+ 	<context:component-scan base-package="mom.services" />
+ 	<context:component-scan base-package="mom.dao" />
+ 	<context:component-scan base-package="mom.entities"/>
+ 	<context:component-scan base-package="mom.aop"/>
+ 	
+ 	<mvc:annotation-driven />
+ 	
+ 	<!-- <mvc:resources mapping="/**/*.css" location="/resources/css/" />
+ 	
+ 	<mvc:resources mapping="/resources/js/**" location="resources/js/" /> -->
+ 	
+ 	<mvc:resources mapping="/resources/js/**" location="/resources/js/" />
+ 	<mvc:resources mapping="/resources/css/**" location="/resources/css/" />
+ 	<mvc:resources mapping="/resources/fonts/**" location="/resources/fonts/" />
+ 	<mvc:resources mapping="/resources/templates/**" location="/resources/templates/" />
+ 	
+ 	<mvc:resources mapping="/*.html" location="/WEB-INF/views/" />
+ 	
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+	
+	<import resource="mom-aop.xml" />
+	
+	<import resource="mom-dbmanager.xml" />
+	
+	<import resource="spring-security.xml" />	
+	
+</beans> 

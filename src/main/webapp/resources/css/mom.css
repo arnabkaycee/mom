@@ -1,0 +1,118 @@
+.pull-left{
+	text-align: left !important;
+}
+
+.pull-right{
+	text-align: right;
+}
+
+.no-padding-left{
+	padding-left: 0px;	
+}
+
+.no-padding-right{
+	padding-right: 0px;	
+}
+
+.normal-font-weight{
+	font-weight: normal;
+}
+
+.navbar-z2a {
+  background-color: #286090;
+  border-color: #e7e7e7;
+}
+
+.navbar-brand-z2a{
+	color: white !important;
+}
+
+#exTab1 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+#exTab2 h3 {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+/* remove border radius for the tab */
+
+#exTab1 .nav-pills > li > a {
+  border-radius: 0;
+}
+
+/* change border radius for the tab , apply corners on top*/
+
+#exTab3 .nav-pills > li > a {
+  border-radius: 4px 4px 0 0 ;
+}
+
+#exTab3 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+.mom-title{
+	font-size: 18px !important;	
+}
+
+.mom-heading{
+	padding : 10px;
+}
+
+.control-label{
+	font-weight: normal !important;
+}
+
+.margin10{
+	margin-top: 10px;
+}
+
+.margin70{
+	margin-top: 70px;
+}
+
+.tile.tile-medium {
+	height: 300px !important;
+	width: 350px !important;
+}
+.pad{
+	padding-top: 60px;
+	
+}
+
+.footer{
+	height: 30px !important;
+	padding-top: 12px !important;
+}
+
+.pad150{
+	padding-bottom: 50px !important;
+}
+
+.pad-right-none{
+	padding-right: 0px;	
+}
+
+.pad-bottom-10{
+	padding-bottom: 10px;
+}
+
+/* .select2-choices {
+    position: relative;
+  }
+ */ 
+.ui-select-multiple input.ui-select-search {
+    width: 100% !important;
+  } 
+  
+ .pull-center{
+ 	padding-left: 50px;
+ } 
+ 
+  

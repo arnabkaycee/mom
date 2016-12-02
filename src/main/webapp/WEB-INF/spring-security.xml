@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<security:http pattern="/resources/css/**" security="none"></security:http>
+	<security:http pattern="/resources/fonts/**" security="none"></security:http>
+	
+	<security:http pattern="/resources/templates/login/*.html" security="none"></security:http>
+
+
+	<security:http auto-config="false">
+	<security:headers>
+		<security:cache-control/>
+	</security:headers>
+		<security:intercept-url pattern="/resources/js/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+
+		<security:intercept-url pattern="/resources/js/controllers/**"
+			access="ROLE_USER" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/services/**"
+			access="ROLE_USER" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/directives/**"
+			access="ROLE_USER" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/filters/**"
+			access="ROLE_USER" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/templates/**"
+			access="ROLE_USER" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/controllers/main-controller.js"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<security:intercept-url
+			pattern="/resources/js/controllers/login-controller.js" access="IS_AUTHENTICATED_ANONYMOUSLY"
+			requires-channel="any" />
+		<security:intercept-url
+			pattern="/resources/js/controllers/signup-controller.js" access="IS_AUTHENTICATED_ANONYMOUSLY"
+			requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/services/common-service.js"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/services/common-service.js"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		<security:intercept-url pattern="/resources/js/services/common-service.js"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+
+		<security:intercept-url pattern="/login.html"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+		
+		<security:intercept-url pattern="/index.html"
+			access="ROLE_USER" requires-channel="any" />
+
+		<security:intercept-url pattern="/login.html"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+
+		<security:intercept-url pattern="/failure"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+
+		<security:intercept-url pattern="/logout"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+
+		<security:intercept-url pattern="/getmoms"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="any" />
+
+		<security:intercept-url pattern="/**" access="ROLE_USER"
+			requires-channel="any" />
+
+
+
+		<security:form-login login-page='/login.html'
+			username-parameter="j_username" password-parameter="j_password"
+			always-use-default-target="true" default-target-url="/success"
+			authentication-failure-url="/failure" />
+
+		<security:logout logout-url="/j_spring_security_logout"
+			logout-success-url="/logout" />
+
+		<security:access-denied-handler
+			error-page="/403page" />
+
+		<security:logout delete-cookies="JSESSIONID" />
+
+		<security:port-mappings>
+			<security:port-mapping http="8080" https="8443" />
+		</security:port-mappings>
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="ptswUserDetailsService">
+			<!-- <security:password-encoder ref="encoder"/> -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<!-- <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"> 
+		</bean> -->
+
+	<!-- <bean id="customLogoutSuccessHandler" class="mom.controllers.LogoutHandler"></bean> -->
+
+	<bean id="ptswUserDetailsService"
+		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="usersByUsernameQuery"
+			value="select user_id as userid, password as password, case when version=1 then 'true' else 'false' end as enable from users where user_id = ?" />
+		<property name="authoritiesByUsernameQuery"
+			value="select u.user_id as userid, 'ROLE_USER' as authority from users u where u.user_id = ?" />
+	</bean>
+
+</beans>

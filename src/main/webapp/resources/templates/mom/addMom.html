@@ -1,0 +1,455 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    <div class="row info-header">
+                        <div class="col-md-3">
+                            <div class="panel-holder">
+                                <div class="my-panel pane-1">
+                                    <div class="row row-eq-height">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-users fa-3x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="small"><b>Meeting Name</b></div>
+                                            <div>{{data.meetingName}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="panel-holder">
+                                <div class="my-panel pane-2">
+                                    <div class="row row-eq-height">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-code fa-3x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="small"><b>Project Name</b></div>
+                                            <div>{{data.project[0].name}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="panel-holder">
+                                <div class="my-panel pane-3">
+                                    <div class="row row-eq-height">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-calendar fa-3x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="small"><b>Date & Time</b></div>
+                                            <div>{{(data.meetingDate && data.startTime && data.endTime)?((data.meetingDate | date:'dd-MM-yyyy')+", "+(data.startTime | date:'HH:mm')+" - "+(data.endTime | date:'HH:mm')):''}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="panel-holder">
+                                <div class="my-panel pane-4">
+                                    <div class="row row-eq-height">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-map-marker fa-3x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="small"><b>Place / Location</b></div>
+                                            <div>{{data.location[0].name}}</div>
+                                            {{}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <nav class="wizard-nav-container">
+
+                            <ul class="nav nav-pills nav-wizard nav-justified">
+                                <li ng-class="{ active: isSelected(1)}">
+                                	<i ng-show="hasTabError(1)" class="fa fa-exclamation-circle fa-inverse" style="color: #FF6161;position: absolute;z-index: 1;font-size: 2.4em;margin-top: 5px;margin-left: 38px;"></i>
+                                    <a ng-click="selectTab(1)" data-toggle="tab"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Basic Information
+                                    </a>
+                                    <div class="nav-arrow"></div>
+                                </li>
+                                <li ng-class="{ active: isSelected(2)}">
+                                    <div class="nav-wedge"></div>
+                                    <i ng-show="hasTabError(2)" class="fa fa-exclamation-circle fa-inverse" style="color: #FF6161;position: absolute;z-index: 1;font-size: 2.4em;margin-top: 5px;margin-left: 38px;"></i>
+                                    <a ng-click="selectTab(2)" data-toggle="tab"><i class="fa fa-comments" aria-hidden="true"></i>&nbsp;&nbsp;Decision / Discussion Points</a>
+                                    <div class="nav-arrow"></div>
+                                </li>
+                                <li ng-class="{ active: isSelected(3)}">
+                                	<i ng-show="hasTabError(3)" class="fa fa-exclamation-circle fa-inverse" style="color: #FF6161;position: absolute;z-index: 1;font-size: 2.4em;margin-top: 5px;margin-left: 38px;"></i>
+                                    <div class="nav-wedge"></div>
+                                    <a ng-click="selectTab(3)" data-toggle="tab"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Action Items</a>
+                                </li>
+
+                            </ul>
+
+                        </nav>
+                    </div>
+                </div>
+
+
+                <div class="panel-body" ng-show="isSelected(1)">
+                    <form name="basicInformationForm" novalidate>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <fieldset class="form-group required">
+                                    <label for="meetingName">Meeting Name</label>
+                                    <input type="text" class="form-control" name="meetingName" ng-model="data.meetingName" required maxlength="128">
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+                                <fieldset class="form-group required">
+                                    <label for="projectName">Project Name</label>
+                                    <ui-select multiple tagging="tagTransform" tagging-label="(custom new 'Project')" ng-model="data.project" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" limit="1" required name="projectName">
+                                        <ui-select-match>{{$item.name}}</ui-select-match>
+                                        <ui-select-choices repeat="project in allProjects | filter:$select.search | limitTo: 5" refresh="refreshProjects($select.search)">
+                                            {{project.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <fieldset class="form-group required">
+                                    <label for="location">Place / Location of Meeting</label>
+                                    <ui-select multiple tagging="tagTransform" name="location" tagging-label="(custom new 'Location')" ng-model="data.location" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" limit="1" required>
+                                        <ui-select-match>{{$item.name}}</ui-select-match>
+                                        <ui-select-choices repeat="location in allLocations | filter:$select.search | limitTo: 5" refresh="refreshLocations($select.search)">
+                                            {{location.name}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3">
+                                <fieldset class="form-group required" >
+                                    <label for="meetingDate">Meeting Date</label>
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup="dd-MMM-yyyy" ng-model="data.meetingDate" is-open="calendarOpenFlags['meetingDate']" name="meetingDate" enable-time="false" datepicker-options="meetingDateOptions" ng-readonly="true" required/>
+                                        <span class="input-group-btn">
+                                        	<button type="button" class="btn btn-default" ng-click="openCalendar($event, 'meetingDate')"><i class="fa fa-calendar"></i></button>
+                                    	</span>
+                                    </p>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+
+                                <fieldset class="form-group required">
+                                    <label for="participants">Meeting Participants</label>
+                                    <!--<ui-select multiple tagging tagging-label="(custom 'new' Email)" ng-model="data.participants" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" ng-change="validateEmail(data.participants)" required>
+                                        <ui-select-match placeholder="Enter email(s)">{{$item}}</ui-select-match>
+                                        <ui-select-choices repeat="color in availableColors | filter:$select.search">
+                                            {{color}}
+                                        </ui-select-choices>
+                                    </ui-select>-->
+                                    <ui-select multiple ng-model="data.participants" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" ng-change="validateEmail(anActionItem.responsibility, $index)" required name="participants">
+                                        <ui-select-match placeholder="Enter email(s)">{{$item}}</ui-select-match>
+                                        <ui-select-choices repeat="email in allEmails | filter:$select.search | limitTo: 5" refresh="refreshEmail($select.search)">
+                                            {{email}}
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <!-- 3rd Row -->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <fieldset class="form-group required" ng-class="{ 'has-error': (basicInformationForm.startTime.$touched && basicInformationForm.startTime.$error.max) }">
+                                    <label for="startTime">Start Time</label>
+                                		<input type="time" ng-model="data.startTime" class="form-control"
+	       								placeholder="HH:mm" ng-max="getStartMaxTime" required name="startTime"/>    
+                                </fieldset>
+                            </div>
+                            <div class="col-md-3">
+                                <fieldset class="form-group required" ng-class="{ 'has-error': (basicInformationForm.endTime.$touched && basicInformationForm.endTime.$error.min) }">
+                                    <label for="endTime">End Time</label>
+	                                    <input type="time" ng-model="data.endTime" class="form-control"
+    	   								placeholder="HH:mm" ng-min="data.startTime" required name="endTime"/>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-4">
+                                <fieldset class="form-group required">
+                                    <label for="recipients">MoM Recipients</label>
+                                    <!--<ui-select multiple tagging tagging-label="(custom 'new' Email)" ng-model="data.recipients" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" ng-change="validateEmail(data.recipients)" required>
+                                        <ui-select-match placeholder="Enter email(s)">{{$item}}</ui-select-match>
+                                        <ui-select-choices repeat="color in availableColors | filter:$select.search">
+                                            {{color}}
+                                        </ui-select-choices>
+                                    </ui-select>-->
+
+                                    <ui-select multiple ng-model="data.recipients" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" ng-change="validateEmail(anActionItem.responsibility, $index)" required name="recipients">
+                                        <ui-select-match placeholder="Enter email(s)">{{$item}}</ui-select-match>
+                                        <ui-select-choices repeat="email in allEmails | filter:$select.search | limitTo: 5" refresh="refreshEmail($select.search)">
+                                            {{email}}
+                                        </ui-select-choices>
+                                    </ui-select>
+
+                                </fieldset>
+                            </div>
+                            <div class="col-md-2 text-center" style="padding-top:25px;">
+                                <button type="button" class="btn btn-primary" ng-click="copyEmails()"><i class="fa fa-arrow-down"></i>&nbsp;&nbsp;Copy Participants</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div></div>
+                </div>
+
+
+                <div class="panel-body" ng-show="isSelected(2)">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading dp-panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+                                <strong>Decision Points</strong>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body panel-body-slim">
+                                    <form name="decisionPoints" novalidate>
+                                        <div class="row col-md-12 no-right-pad btm-margin">
+                                            <button class="btn btn-sm btn-primary pull-right" ng-disabled="decisionPoints.$invalid" ng-click="addNewDSPt()">Add New&nbsp;&nbsp;<i class="fa fa-plus"></i></button>
+                                        </div>
+                                        <div class="col-md-12 well well-sm dp-box">
+                                            <table class="table table-striped table-bordered table-list">
+                                                <tbody>
+                                                    <tr ng-repeat="decisionPoint in data.decisionPoints track by $index">
+                                                        <td class="text-center">{{$index+1}}</td>
+                                                        <td style="width:90%">
+                                                            <input type="text" class="form-control" ng-model="decisionPoint.name" required/>
+                                                        </td>
+                                                        <td align="center" style="width:5%">
+                                                            <button class="btn btn-danger" ng-click="removeDSPt($index)"><i class="fa fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading dp-panel-heading collapsed" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo">
+                                <strong>Discussion Points</strong>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body panel-body-slim">
+                                    <form name="discussionPoints" novalidate>
+                                        <div class="row col-md-12 no-right-pad btm-margin">
+                                            <button class="btn btn-sm btn-primary pull-right" ng-disabled="discussionPoints.$invalid" ng-click="addNewDIPt()">Add New&nbsp;&nbsp;<i class="fa fa-plus"></i></button>
+                                        </div>
+                                        <div class="col-md-12 well well-sm dp-box">
+                                            <table class="table table-striped table-bordered table-list">
+                                                <tbody>
+                                                    <tr ng-repeat="discussionPoint in data.discussionPoints track by $index">
+                                                        <td class="text-center">{{$index+1}}</td>
+                                                        <td style="width:90%">
+                                                            <input type="text" class="form-control" ng-model="discussionPoint.name" required/>
+                                                        </td>
+                                                        <td align="center" style="width:5%">
+                                                            <button class="btn btn-danger" ng-click="removeDIPt($index)"><i class="fa fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Action Items [Start]-->
+                <div class="panel-body" ng-show="isSelected(3)">
+                    <form name="momForm" novalidate>
+                        <div ng-controller="editActionItems as eai">
+                            <div class="row col-md-12 no-right-pad btm-margin">
+                                <button class="btn btn-sm btn-primary pull-right" ng-click="addActionItemRow()">Add New&nbsp;&nbsp;<i class="fa fa-plus"></i></button>
+                            </div>
+                            <table class="table table-striped table-bordered table-list">
+
+                                <!-- Table Header [Start] -->
+                                <thead ng-hide="editMode">
+                                    <tr>
+                                        <th class="hidden-xs text-center" style="width:5%">SNo.</th>
+                                        <th class="text-center" style="width:20%">Action Items</th>
+                                        <th class="text-center" style="width:20%">Responsibilities</th>
+                                        <th class="text-center" style="width:15%">Target Date</th>
+                                        <th class="text-center" style="width:15%">Status</th>
+                                        <th class="text-center" style="width:20%">Remarks</th>
+                                        <th class="text-center" style="width:5%"><em class="fa fa-cog"></em></th>
+                                    </tr>
+                                </thead>
+                                <thead ng-show="editMode">
+                                    <th class="hidden-xs text-center" style="width:3%">SNo.</th>
+                                    <th class="text-center" style="width:19%">Action Items</th>
+                                    <th class="text-center" style="width:15%">Responsibilities</th>
+                                    <th class="text-center" style="width:12%">Target Date</th>
+                                    <th class="text-center" style="width:12%">Revised Target Date</th>
+                                    <th class="text-center" style="width:12%">Actual End Date</th>
+                                    <th class="text-center" style="width:10%">Status</th>
+                                    <th class="text-center" style="width:15%">Remarks</th>
+                                    <th class="text-center" style="width:2%"><em class="fa fa-cog"></em></th>
+                                </thead>
+                                <!-- Table Header [End] -->
+
+
+                                <!-- Footer  [Start] -->
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="{{editMode?'9':'7'}}">
+                                            <div class="col-md-2">Page {{currentPage+1}} of {{pagedItems.length}}</div>
+                                            <div class="col-md-10">
+                                                <div class="pull-right">
+                                                    <ul class="pagination">
+                                                        <li ng-class="{disabled: currentPage == 0}">
+                                                            <a href="javascript:;" ng-click="prevPage()">« Prev</a>
+                                                        </li>
+                                                        <li ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()">
+                                                            <a href="javascript:;" ng-bind="n + 1">1</a>
+                                                        </li>
+                                                        <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                                            <a href="javascript:;" ng-click="nextPage()">Next »</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                                <!-- Footer [End] -->
+
+                                <!-- Table Body for Add Mode [Start]-->
+                                <tbody ng-hide="editMode">
+                                    <tr ng-repeat="(index,anActionItem) in pagedItems[currentPage]">
+                                        <td class="hidden-xs text-center">{{currentPage*itemsPerPage+(index+1)}}</td>
+                                        <td>
+                                            <textarea class="form-control dynamic-ta" msd-elastic name="anActionItem.actionItem" rows="1" ng-model="anActionItem.actionItem" required></textarea>
+                                        </td>
+                                        <td>
+                                            <!--tagging tagging-label="(custom 'new' Email)"-->
+                                            <ui-select multiple ng-model="anActionItem.responsibility" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" ng-change="validateEmail(anActionItem.responsibility, $index)" required>
+                                                <ui-select-match placeholder="Enter email(s)">{{$item}}</ui-select-match>
+                                                <ui-select-choices repeat="email in allEmails | filter:$select.search | limitTo: 5" refresh="refreshEmail($select.search)">
+                                                    {{email}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="anActionItem.targetDate" is-open="anActionItem.targetDateDPSts" enable-time="false" ng-readonly="true" datepicker-options="dpOptions" required />
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openActionItemDatePicker(anActionItem, 'targetDateDPSts')"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                            </p>
+                                        </td>
+
+                                        <td>
+                                            <div class="form-group">
+                                                <select class="form-control" ng-model="anActionItem.status" ng-value="anActionItem.status" ng-options="stsOption.displayName for stsOption in allStatus track by stsOption.val" required>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control dynamic-ta" msd-elastic name="anActionItem.remarks" rows="1" ng-model="anActionItem.remarks"></textarea>
+                                        </td>
+                                        <td align="center">
+                                            <button class="btn btn-danger" ng-click="removeRow($index)"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <!-- Table Body for Add Mode [End]-->
+
+
+                                <!-- Table Body for Edit Mode [Start] -->
+                                <tbody ng-show="editMode">
+                                    <tr ng-repeat="(index,anActionItem) in pagedItems[currentPage]">
+                                        <td class="hidden-xs text-center">{{currentPage*itemsPerPage+(index+1)}}</td>
+                                        <td>
+                                            <textarea class="form-control dynamic-ta" msd-elastic name="anActionItem.actionItem" rows="1" ng-model="anActionItem.actionItem" required></textarea>
+                                        </td>
+                                        <td>
+                                            <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="anActionItem.responsibility" theme="bootstrap" sortable="true" ng-disabled="disabled" class="form-control" ng-change="validateEmail(anActionItem.responsibility, $index)" required>
+                                                <ui-select-match placeholder="Enter email(s)">{{$item}}</ui-select-match>
+                                                <ui-select-choices repeat="email in allEmails | filter:$select.search | limitTo: 5" refresh="refreshEmail($select.search)">
+                                                    {{email}}
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="anActionItem.targetDate" is-open="anActionItem.targetDateDPSts" enable-time="false" datepicker-options="dpOptions" ng-readonly="true" required />
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openActionItemDatePicker(anActionItem, 'targetDateDPSts')"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="anActionItem.revisedTargetDate" is-open="anActionItem.rvTargetDateDPSts" enable-time="false" datepicker-options="dpOptions" ng-readonly="true" />
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openActionItemDatePicker(anActionItem, 'rvTargetDateDPSts')"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="anActionItem.actualEndDate" is-open="anActionItem.actualEndDateDPSts" enable-time="false" datepicker-options="dpOptions" ng-readonly="true" />
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openActionItemDatePicker(anActionItem, 'actualEndDateDPSts')"><i class="fa fa-calendar"></i></button>
+                                            </span>
+                                            </p>
+                                        </td>
+
+                                        <td>
+                                            <div class="form-group">
+                                                <select class="form-control" ng-model="anActionItem.status" ng-value="anActionItem.status" ng-options="stsOption.displayName for stsOption in allStatus track by stsOption.val" required>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control dynamic-ta" msd-elastic name="anActionItem.remarks" rows="1" ng-model="anActionItem.remarks"></textarea>
+                                        </td>
+                                        <td align="center">
+                                            <button class="btn btn-danger" ng-click="removeRow($index)"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <!-- Table Body for Edit Mode [End] -->
+
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <!-- Action Items [End] -->
+
+                <div class="panel-footer">
+                    <!--<div class="col-md-12">
+                            <button type="button" class="btn btn-info pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add New</button>
+                        </div>
+                    <div class="col-md-12" style="margin:5px;"></div>-->
+                    <div class="row">
+                        <!--<div class="col col-xs-4">Page 1 of 5
+						</div>-->
+                        <div class="col col-xs-12">
+                            <!--<div class="btn-group pull-right" role="group">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Previous</button>
+                            <button type="button" class="btn btn-primary">Next&nbsp;&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+                        </div>-->
+                            <div class="btn-group pull-right" role="group">
+                                <button type="button" class="btn btn-primary" ng-disabled="!isValidForm() || (formSubmitted  && isValidForm())" ng-click="submitForm()">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
